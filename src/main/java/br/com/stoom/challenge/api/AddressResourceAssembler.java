@@ -1,5 +1,8 @@
 package br.com.stoom.challenge.api;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,6 +26,18 @@ public class AddressResourceAssembler {
     public AddressResource toResource(Address address) {
         return modelMapper.map( address, AddressResource.class );
     }
+    
+    public List<AddressResource> toResourceList(List<Address> addresses) {
+    	List<AddressResource> addressResources = new ArrayList<>();
+    	
+    	for(Address address : addresses) {
+    		addressResources.add(toResource(address));
+    	}
+    	
+        return addressResources;
+    }
+    
+    
     
     public void copyToDomainObject(AddressResource input, Address address) {
         modelMapper.map( input, address);

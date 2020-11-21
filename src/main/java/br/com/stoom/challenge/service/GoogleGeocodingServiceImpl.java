@@ -24,17 +24,22 @@ public class GoogleGeocodingServiceImpl implements GoogleGeocodingService{
 
     @Override
     public void fillGeolocalization(Address address) {
-       if(address.getLatitude() == 0 && address.getLongidute() == 0)
+       if(address.getLatitude() != 0 && address.getLongitude() != 0)
            return;
         try {
             GeocodingResult[] results = GeocodingApi.geocode(googleGeoApi, address.getCompleteAddres()).await();
-            if(results.length == 0)
-                return;
+            if(results.length == 0) {
+            	System.out.println("GEOLOCATION NOT FOUND");
+            	return;
+            }
+            
+            System.out.println("GEOLOCATION FOUND: "+results[0].geometry.location.lat);
             LatLng latLng = results[0].geometry.location;
             address.setLatitude(latLng.lat);
-            address.setLongidute(latLng.lng);
+            address.setLongitude(latLng.lng);
             
         } catch (Exception e) {
+        	System.out.println("GEOLOCATION ERROR: " + e.getMessage());
             throw new RuntimeException("ERROR searching for data at Google Geo Api");
         }
     }

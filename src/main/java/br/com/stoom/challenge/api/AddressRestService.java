@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.stoom.challenge.domain.Address;
 import br.com.stoom.challenge.service.AddressService;
-import lombok.AllArgsConstructor;
 
 @RestController
-@AllArgsConstructor
 @RequestMapping("v1/address")
 public class AddressRestService {
  
@@ -43,6 +41,7 @@ public class AddressRestService {
         addressResourceAssembler.copyToDomainObject(input, address);
         addressService.save(address);
         AddressResource addressResource = addressResourceAssembler.toResource(address);
+        
         return ResponseEntity.ok(addressResource);
     }
 
@@ -52,6 +51,12 @@ public class AddressRestService {
         return ResponseEntity.ok(addressResourceAssembler.toResource(address));
     }
 
+    @GetMapping()
+    public ResponseEntity<?> findAll(){
+        
+        return ResponseEntity.ok(addressResourceAssembler.toResourceList(addressService.getAll()));
+    }
+    
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         Address address = addressService.getById(id);

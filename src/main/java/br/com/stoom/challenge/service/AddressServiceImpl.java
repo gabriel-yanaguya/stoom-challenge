@@ -1,17 +1,17 @@
 package br.com.stoom.challenge.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import br.com.stoom.challenge.domain.Address;
 import br.com.stoom.challenge.repository.AddressRepository;
-import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
 public class AddressServiceImpl implements AddressService{
 
 	private AddressRepository addressRepository;
@@ -31,6 +31,16 @@ public class AddressServiceImpl implements AddressService{
 			 throw new RuntimeException("Address not found");
 		 }
 		 return address.get();
+	 }
+	 
+	 @Override
+	 public List<Address> getAll() {
+		 Iterable<Address> addresses = addressRepository.findAll();
+		 
+		 
+		 List<Address> adressesList = StreamSupport.stream(addresses.spliterator(), false)
+				    .collect(Collectors.toList());
+		 return adressesList;
 	 }
 	 
 	 @Override
